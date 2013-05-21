@@ -3,7 +3,7 @@ import json
 from django.core.cache import cache
 from django import template
 
-from twitterfeed import user_timeline, twitter_search
+from twitterfeed.utils import user_timeline, twitter_search
 from twitterfeed import settings as twitter_settings
 
 register = template.Library()
