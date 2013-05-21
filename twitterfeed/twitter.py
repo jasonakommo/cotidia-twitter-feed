@@ -66,7 +66,7 @@ import oauth2 as oauth
 CHARACTER_LIMIT = 140
 
 # A singleton representing a lazily instantiated FileCache.
-DEFAULT_CACHE = object()
+DEFAULT_CACHE = False #object()
 
 REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
 ACCESS_TOKEN_URL  = 'https://api.twitter.com/oauth/access_token'
