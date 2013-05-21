@@ -13,9 +13,7 @@ CLASSIFIERS = [
     'Topic :: Software Development',
 ]
 
-install_requires = [
-    'django==1.5.1',
-]
+install_requires = []
 
 # taken from django-registration
 # Compile the list of packages available, because distutils doesn't have
