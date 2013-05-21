@@ -22,8 +22,6 @@ class UserTimelineNode(template.Node):
         statuses = user_timeline(self.username, self.limit)
         context[twitter_settings.TWITTER_CONTEXT_STATUS_KEY] = json.loads(statuses)
 
-        print json.loads(statuses)
-
         return ''
 
 @register.tag(name="twitter_user_timeline")

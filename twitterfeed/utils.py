@@ -19,7 +19,6 @@ def user_timeline(username, limit=10):
 
 	api = twitter.Api(consumer_key=twitter_settings.TWITTER_CONSUMER_KEY, consumer_secret=twitter_settings.TWITTER_CONSUMER_SECRET, access_token_key=twitter_settings.TWITTER_ACCESS_TOKEN_KEY, access_token_secret=twitter_settings.TWITTER_ACCESS_TOKEN_SECRET)
 	statuses = api.GetUserTimeline(screen_name=username, count=limit)
-	print statuses
 	status_json = []
 	for s in statuses:
 		status_json.append({'text':replace_url_to_link(s.text), 'created_at':twitter_date_format(s.created_at)})
