@@ -2,6 +2,8 @@ import json, re
 from twitterfeed import twitter
 from twitterfeed import settings as twitter_settings
 
+VERSION = '0.1'
+
 def replace_url_to_link(value):
     # Replace url to link
     urls = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)", re.MULTILINE|re.UNICODE)
