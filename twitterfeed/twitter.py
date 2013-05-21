@@ -2226,7 +2226,7 @@ class Api(object):
         Set to True to enable debug output from urllib2 when performing
         any HTTP requests.  Defaults to False. [Optional]
     '''
-    self.SetCache(cache)
+
     self._urllib         = urllib2
     self._cache_timeout  = Api.DEFAULT_CACHE_TIMEOUT
     self._input_encoding = input_encoding
@@ -3558,18 +3558,6 @@ class Api(object):
     data = self._ParseAndCheckTwitter(json)
     return User.NewFromJsonDict(data)
 
-  def SetCache(self, cache):
-    '''Override the default cache.  Set to None to prevent caching.
-
-    Args:
-      cache:
-        An instance that supports the same API as the twitter._FileCache
-    '''
-    if cache == DEFAULT_CACHE:
-      self._cache = _FileCache()
-    else:
-      self._cache = cache
-
   def SetUrllib(self, urllib):
     '''Override the default urllib implementation.
 
@@ -3579,14 +3567,6 @@ class Api(object):
     '''
     self._urllib = urllib
 
-  def SetCacheTimeout(self, cache_timeout):
-    '''Override the default cache timeout.
-
-    Args:
-      cache_timeout:
-        Time, in seconds, that responses should be reused.
-    '''
-    self._cache_timeout = cache_timeout
 
   def SetUserAgent(self, user_agent):
     '''Override the default user agent
@@ -3880,122 +3860,9 @@ class Api(object):
       url = self._BuildUrl(url, extra_params=extra_params)
       encoded_post_data = self._EncodePostData(post_data)
 
-    # Open and return the URL immediately if we're not going to cache
-    if encoded_post_data or no_cache or not self._cache or not self._cache_timeout:
-      response = opener.open(url, encoded_post_data)
-      url_data = self._DecompressGzippedResponse(response)
-      opener.close()
-    else:
-      # Unique keys are a combination of the url and the oAuth Consumer Key
-      if self._consumer_key:
-        key = self._consumer_key + ':' + url
-      else:
-        key = url
-
-      # See if it has been cached before
-      last_cached = self._cache.GetCachedTime(key)
-
-      # If the cached version is outdated then fetch another and store it
-      if not last_cached or time.time() >= last_cached + self._cache_timeout:
-        try:
-          response = opener.open(url, encoded_post_data)
-          url_data = self._DecompressGzippedResponse(response)
-          self._cache.Set(key, url_data)
-        except urllib2.HTTPError, e:
-          print e
-        opener.close()
-      else:
-        url_data = self._cache.Get(key)
+    response = opener.open(url, encoded_post_data)
+    url_data = self._DecompressGzippedResponse(response)
+    opener.close()
 
     # Always return the latest version
     return url_data
-
-class _FileCacheError(Exception):
-  '''Base exception class for FileCache related errors'''
-
-class _FileCache(object):
-
-  DEPTH = 3
-
-  def __init__(self,root_directory=None):
-    self._InitializeRootDirectory(root_directory)
-
-  def Get(self,key):
-    path = self._GetPath(key)
-    if os.path.exists(path):
-      return open(path).read()
-    else:
-      return None
-
-  def Set(self,key,data):
-    path = self._GetPath(key)
-    directory = os.path.dirname(path)
-    if not os.path.exists(directory):
-      os.makedirs(directory)
-    if not os.path.isdir(directory):
-      raise _FileCacheError('%s exists but is not a directory' % directory)
-    temp_fd, temp_path = tempfile.mkstemp()
-    temp_fp = os.fdopen(temp_fd, 'w')
-    temp_fp.write(data)
-    temp_fp.close()
-    if not path.startswith(self._root_directory):
-      raise _FileCacheError('%s does not appear to live under %s' %
-                            (path, self._root_directory))
-    if os.path.exists(path):
-      os.remove(path)
-    os.rename(temp_path, path)
-
-  def Remove(self,key):
-    path = self._GetPath(key)
-    if not path.startswith(self._root_directory):
-      raise _FileCacheError('%s does not appear to live under %s' %
-                            (path, self._root_directory ))
-    if os.path.exists(path):
-      os.remove(path)
-
-  def GetCachedTime(self,key):
-    path = self._GetPath(key)
-    if os.path.exists(path):
-      return os.path.getmtime(path)
-    else:
-      return None
-
-  def _GetUsername(self):
-    '''Attempt to find the username in a cross-platform fashion.'''
-    try:
-      return os.getenv('USER') or \
-             os.getenv('LOGNAME') or \
-             os.getenv('USERNAME') or \
-             os.getlogin() or \
-             'nobody'
-    except (AttributeError, IOError, OSError), e:
-      return 'nobody'
-
-  def _GetTmpCachePath(self):
-    username = self._GetUsername()
-    cache_directory = 'python.cache_' + username
-    return os.path.join(tempfile.gettempdir(), cache_directory)
-
-  def _InitializeRootDirectory(self, root_directory):
-    if not root_directory:
-      root_directory = self._GetTmpCachePath()
-    root_directory = os.path.abspath(root_directory)
-    if not os.path.exists(root_directory):
-      os.mkdir(root_directory)
-    if not os.path.isdir(root_directory):
-      raise _FileCacheError('%s exists but is not a directory' %
-                            root_directory)
-    self._root_directory = root_directory
-
-  def _GetPath(self,key):
-    try:
-        hashed_key = md5(key).hexdigest()
-    except TypeError:
-        hashed_key = md5.new(key).hexdigest()
-
-    return os.path.join(self._root_directory,
-                        self._GetPrefix(hashed_key),
-                        hashed_key)
-
-  def _GetPrefix(self,hashed_key):
-    return os.path.sep.join(hashed_key[0:_FileCache.DEPTH])
