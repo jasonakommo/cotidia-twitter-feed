@@ -1,5 +1,4 @@
-import json, re
-from twitterfeed import twitter
+import json, re, twitter
 from twitterfeed import settings as twitter_settings
 
 def replace_url_to_link(value):

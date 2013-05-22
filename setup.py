@@ -13,7 +13,7 @@ CLASSIFIERS = [
     'Topic :: Software Development',
 ]
 
-install_requires = []
+install_requires = ['python-twitter==0.8.7']
 
 # taken from django-registration
 # Compile the list of packages available, because distutils doesn't have
