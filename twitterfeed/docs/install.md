@@ -41,3 +41,6 @@ Must be set in your project settings
 
 	# The context key name for twitter statuses
 	`TWITTER_CONTEXT_STATUS_KEY = 'twitter_statuses'`
+	
+	# The base API url
+	`TWITTER_BASE_URL` = 'https://api.twitter.com/1.1'
