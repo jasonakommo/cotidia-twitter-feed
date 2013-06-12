@@ -16,7 +16,7 @@ def twitter_date_format(datestring):
 
 def user_timeline(username, limit=10):
 
-	api = twitter.Api(consumer_key=twitter_settings.TWITTER_CONSUMER_KEY, consumer_secret=twitter_settings.TWITTER_CONSUMER_SECRET, access_token_key=twitter_settings.TWITTER_ACCESS_TOKEN_KEY, access_token_secret=twitter_settings.TWITTER_ACCESS_TOKEN_SECRET, cache=False)
+	api = twitter.Api(consumer_key=twitter_settings.TWITTER_CONSUMER_KEY, consumer_secret=twitter_settings.TWITTER_CONSUMER_SECRET, access_token_key=twitter_settings.TWITTER_ACCESS_TOKEN_KEY, access_token_secret=twitter_settings.TWITTER_ACCESS_TOKEN_SECRET, base_url=twitter_settings.TWITTER_BASE_URL, cache=False)
 	statuses = api.GetUserTimeline(screen_name=username, count=limit, include_rts=True)
 	status_json = []
 	for s in statuses:
@@ -24,7 +24,7 @@ def user_timeline(username, limit=10):
 	return json.dumps(status_json)
 
 def twitter_search(term, limit=3):
-	api = twitter.Api(consumer_key=twitter_settings.TWITTER_CONSUMER_KEY, consumer_secret=twitter_settings.TWITTER_CONSUMER_SECRET, access_token_key=twitter_settings.TWITTER_ACCESS_TOKEN_KEY, access_token_secret=twitter_settings.TWITTER_ACCESS_TOKEN_SECRET)
+	api = twitter.Api(consumer_key=twitter_settings.TWITTER_CONSUMER_KEY, consumer_secret=twitter_settings.TWITTER_CONSUMER_SECRET, access_token_key=twitter_settings.TWITTER_ACCESS_TOKEN_KEY, access_token_secret=twitter_settings.TWITTER_ACCESS_TOKEN_SECRET, base_url=twitter_settings.TWITTER_BASE_URL)
 	statuses = api.GetSearch(term=term, per_page=50, page=1, include_entities=True)
 	status_json = []
 	i=0
