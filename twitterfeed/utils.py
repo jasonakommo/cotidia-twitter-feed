@@ -20,6 +20,7 @@ def user_timeline(username, limit=10):
 	statuses = api.GetUserTimeline(screen_name=username, count=limit, include_rts=True)
 	status_json = []
 	for s in statuses:
+		
 		user = {
 			'description':s.user.description, 
 			'followers_count':s.user.followers_count, 
@@ -29,7 +30,6 @@ def user_timeline(username, limit=10):
 			'name':s.user.name, 
 			'profile_image_url':s.user.profile_image_url, 
 			'screen_name':s.user.screen_name, 
-			'status':s.user.status, 
 			'statuses_count':s.user.statuses_count, 
 			'url':s.user.url,
 		}
@@ -55,14 +55,13 @@ def user_timeline(username, limit=10):
 		'relative_created_at':s.relative_created_at, 
 		'retweet_count':s.retweet_count, 
 		'retweeted':s.retweeted, 
-		'retweeted_status':s.retweeted_status, 
 		'source':s.source, 
 		'text':replace_url_to_link(s.text),
 		'truncated':s.truncated, 
 		'urls':s.urls, 
 		'user':user,
 		}
-		
+
 		status_json.append(status)
 	return json.dumps(status_json)
 
