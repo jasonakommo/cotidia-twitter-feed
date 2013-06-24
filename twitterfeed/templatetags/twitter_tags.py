@@ -13,12 +13,14 @@ class UserTimelineNode(template.Node):
         self.username = username
         self.limit = limit
     def render(self, context):
-
-        if cache.get(twitter_settings.TWITTER_CACHE_STATUS_KEY):
-            statuses = cache.get(twitter_settings.TWITTER_CACHE_STATUS_KEY)
+        if twitter_settings.TWITTER_ENABLE_CACHE:
+            if cache.get(twitter_settings.TWITTER_CACHE_STATUS_KEY):
+                statuses = cache.get(twitter_settings.TWITTER_CACHE_STATUS_KEY)
+            else:
+                statuses = user_timeline(self.username, self.limit)
+                cache.set(twitter_settings.TWITTER_CACHE_STATUS_KEY, statuses, twitter_settings.TWITTER_CACHE_TIMEOUT)
         else:
             statuses = user_timeline(self.username, self.limit)
-            cache.set(twitter_settings.TWITTER_CACHE_STATUS_KEY, statuses, twitter_settings.TWITTER_CACHE_TIMEOUT)
 
         context[twitter_settings.TWITTER_CONTEXT_STATUS_KEY] = json.loads(statuses)
 

@@ -20,7 +20,49 @@ def user_timeline(username, limit=10):
 	statuses = api.GetUserTimeline(screen_name=username, count=limit, include_rts=True)
 	status_json = []
 	for s in statuses:
-		status_json.append({'text':replace_url_to_link(s.text), 'created_at':twitter_date_format(s.created_at)})
+
+		user = {
+			'description':s.user.description, 
+			'followers_count':s.user.followers_count, 
+			'id':s.user.id, 
+			'listed_count':s.user.listed_count, 
+			'location':s.user.location, 
+			'name':s.user.name, 
+			'profile_image_url':s.user.profile_image_url, 
+			'screen_name':s.user.screen_name, 
+			'status':s.user.status, 
+			'statuses_count':s.user.statuses_count, 
+			'url':s.user.url,
+		}
+
+		status = {
+		'contributors': s.contributors,
+		'coordinates':s.coordinates, 
+		'created_at':twitter_date_format(s.created_at),
+		'created_at_in_seconds':s.created_at_in_seconds, 
+		'favorited':s.favorited, 
+		'geo':s.geo, 
+		'hashtags':s.hashtags, 
+		'id':s.id, 
+		'in_reply_to_screen_name':s.in_reply_to_screen_name, 
+		'in_reply_to_status_id':s.in_reply_to_status_id, 
+		'in_reply_to_user_id':s.in_reply_to_user_id, 
+		'location':s.location, 
+		'media':s.media, 
+		'now':s.now, 
+		'place':s.place, 
+		'relative_created_at':s.relative_created_at, 
+		'retweet_count':s.retweet_count, 
+		'retweeted':s.retweeted, 
+		'retweeted_status':s.retweeted_status, 
+		'source':s.source, 
+		'text':replace_url_to_link(s.text),
+		'truncated':s.truncated, 
+		'urls':s.urls, 
+		'user':user, 
+		'user_mentions':s.user_mentions,
+		}
+		status_json.append(status)
 	return json.dumps(status_json)
 
 def twitter_search(term, limit=3):

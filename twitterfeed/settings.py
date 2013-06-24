@@ -9,6 +9,9 @@ TWITTER_CONTEXT_STATUS_KEY = getattr(settings, 'TWITTER_CONTEXT_STATUS_KEY', 'tw
 # The base API url
 TWITTER_BASE_URL = getattr(settings, 'TWITTER_BASE_URL', 'https://api.twitter.com/1.1')
 
+# Caching (Recommended)
+TWITTER_ENABLE_CACHE = getattr(settings, 'TWITTER_ENABLE_CACHE', True)
+
 # Twitter credentials
 TWITTER_CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', False)
 TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', False)

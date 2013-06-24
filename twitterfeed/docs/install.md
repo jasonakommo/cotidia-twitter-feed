@@ -3,7 +3,7 @@ Installation
 
 Download the package:
 
-	$ pip install -e 
+	$ pip install -e git+https://guillaumepiot@bitbucket.org/guillaumepiot/cotidia-twitter-feed.git#egg=twitterfeed
 
 Add it to the installed apps in setting:
 
@@ -44,3 +44,6 @@ Must be set in your project settings
 	
 	# The base API url
 	`TWITTER_BASE_URL` = 'https://api.twitter.com/1.1'
+	
+	# Caching (Recommended)
+	TWITTER_ENABLE_CACHE = getattr(settings, 'TWITTER_ENABLE_CACHE', True)
