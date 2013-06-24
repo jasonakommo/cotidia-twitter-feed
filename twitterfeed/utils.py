@@ -20,7 +20,6 @@ def user_timeline(username, limit=10):
 	statuses = api.GetUserTimeline(screen_name=username, count=limit, include_rts=True)
 	status_json = []
 	for s in statuses:
-
 		user = {
 			'description':s.user.description, 
 			'followers_count':s.user.followers_count, 
@@ -35,6 +34,8 @@ def user_timeline(username, limit=10):
 			'url':s.user.url,
 		}
 
+		hashtags = [hashtag.text for hashtag in s.hashtags]
+
 		status = {
 		'contributors': s.contributors,
 		'coordinates':s.coordinates, 
@@ -42,7 +43,7 @@ def user_timeline(username, limit=10):
 		'created_at_in_seconds':s.created_at_in_seconds, 
 		'favorited':s.favorited, 
 		'geo':s.geo, 
-		'hashtags':s.hashtags, 
+		'hashtags':hashtags, 
 		'id':s.id, 
 		'in_reply_to_screen_name':s.in_reply_to_screen_name, 
 		'in_reply_to_status_id':s.in_reply_to_status_id, 
@@ -59,9 +60,9 @@ def user_timeline(username, limit=10):
 		'text':replace_url_to_link(s.text),
 		'truncated':s.truncated, 
 		'urls':s.urls, 
-		'user':user, 
-		'user_mentions':s.user_mentions,
+		'user':user,
 		}
+		
 		status_json.append(status)
 	return json.dumps(status_json)
 

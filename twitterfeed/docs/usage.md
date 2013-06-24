@@ -45,7 +45,7 @@ And a more advanced one:
 		'created_at_in_seconds':s.created_at_in_seconds, 
 		'favorited':s.favorited, 
 		'geo':s.geo, 
-		'hashtags':s.hashtags, 
+		'hashtags':[], 
 		'id':s.id, 
 		'in_reply_to_screen_name':s.in_reply_to_screen_name, 
 		'in_reply_to_status_id':s.in_reply_to_status_id, 
