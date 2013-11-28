@@ -14,7 +14,7 @@ CLASSIFIERS = [
 ]
 
 install_requires = [
-    'python-twitter==0.8.7',
+    'python-twitter==1.1',
 ]
 
 # taken from django-registration

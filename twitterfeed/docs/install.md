@@ -16,6 +16,15 @@ Make sure you have a cache backend in place, as the twitter feed will be cached.
 
 	python manage.py createcachetable [cache_table_name]
 
+And add the following cache settings:
+
+	CACHES = {
+	    'default': {
+	        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+	        'LOCATION': 'cache_table_name',
+	    }
+	}
+
 
 Twitter settings
 ----------------
@@ -47,3 +56,9 @@ Must be set in your project settings
 	
 	# Caching (Recommended)
 	TWITTER_ENABLE_CACHE = getattr(settings, 'TWITTER_ENABLE_CACHE', True)
+
+### NON UNIQUE CACHE KEY
+
+You may have more than one Twitter query to cache, let's say if you a different twitter search result on each page. The cache key specified in settings will automatically add the type of feed (usere timeline or search) and the username or query. That way you can have more than one query cached at any given time.
+
+Bear in mind that you could run into a rate limit over 150 hits per hour, so with a timeout of 30 mins, you may only be able to have 75 different twitter queries cached at any given time.

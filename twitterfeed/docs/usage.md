@@ -17,6 +17,9 @@ Place the following tag anywhere in your template:
 
 The tag will push variable to your template context, in the same key name as `TWITTER_CONTEXT_STATUS_KEY`.
 
+
+### User timeline
+
 So it is then up to you how you display your statuses. Here's a simple example:
 
 	{% for status in twitter_statuses %}
@@ -30,6 +33,16 @@ And a more advanced one:
 		<p><strong>{{status.user.name}}</strong><br> {{status.text|safe}}<br> {{status.created_at|safe}}</p>
 	{% endfor %}
 	
+### Search
+
+You can also query a list of results based on a hashtag:
+	
+	{% twitter_search "#django" 3 %}
+	{% for status in twitter_statuses %}
+	    <p>{{status.text|safe}} - {{status.created_at|safe}}</p>
+	{% endfor %}
+	
+
 ## Variables
 
 `status.text`: the tweet message
@@ -60,7 +73,6 @@ And a more advanced one:
 		'source':s.source, 
 		'text':replace_url_to_link(s.text),
 		'truncated':s.truncated, 
-		'urls':s.urls, 
 		'user':{
 			'description':s.user.description, 
 			'followers_count':s.user.followers_count, 
