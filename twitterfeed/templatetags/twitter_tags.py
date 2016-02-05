@@ -61,12 +61,12 @@ class SearchNode(template.Node):
 
         if twitter_settings.TWITTER_ENABLE_CACHE:
             cache_key = twitter_settings.TWITTER_CACHE_STATUS_KEY + 'search' + re.sub('\W+', ' ', self.query).strip()
-
-            if cache.get(cache_key):
-                statuses = cache.get(cache_key)
-            else:
-                statuses = twitter_search(self.query, self.limit)
-                cache.set(cache_key, statuses, twitter_settings.TWITTER_CACHE_TIMEOUT)
+            statuses = twitter_search(self.query, self.limit)
+            # if cache.get(cache_key):
+            #     statuses = cache.get(cache_key)
+            # else:
+            #     statuses = twitter_search(self.query, self.limit)
+            #     cache.set(cache_key, statuses, twitter_settings.TWITTER_CACHE_TIMEOUT)
         else:
             statuses = twitter_search(self.query, self.limit)
 

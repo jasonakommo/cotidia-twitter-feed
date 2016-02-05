@@ -55,12 +55,21 @@ def render_statuses(statuses):
 		}
 
 		hashtags = [hashtag.text for hashtag in s.hashtags]
-
+		media = []
+		for m in s.media:
+			media.append({
+				"display_url": m.display_url, 
+				"expanded_url": m.expanded_url, 
+				"id": m.id, 
+				"media_url": m.media_url, 
+				"media_url_https": m.media_url_https, 
+				"type": m.type, 
+				"url": m.url
+				})
 		status = {
 		'contributors': s.contributors,
 		'coordinates':s.coordinates, 
 		'created_at':twitter_date_format(s.created_at),
-		'created_at_in_seconds':s.created_at_in_seconds, 
 		'favorited':s.favorited, 
 		'geo':s.geo, 
 		'hashtags':hashtags, 
@@ -69,10 +78,9 @@ def render_statuses(statuses):
 		'in_reply_to_status_id':s.in_reply_to_status_id, 
 		'in_reply_to_user_id':s.in_reply_to_user_id, 
 		'location':s.location, 
-		'media':s.media, 
+		'media':media, 
 		'now':s.now, 
 		'place':s.place, 
-		'relative_created_at':s.relative_created_at, 
 		'retweet_count':s.retweet_count, 
 		'retweeted':s.retweeted, 
 		'source':s.source, 
