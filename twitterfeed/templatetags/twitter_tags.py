@@ -50,25 +50,22 @@ def do_user_timeline(parser, token):
 # Search
 
 class SearchNode(template.Node):
+
     def __init__(self, query, limit):
         self.query = template.Variable(query)
         self.limit = limit
+
     def render(self, context):
         try:
-            self.query = self.query.resolve(context)
+            query = self.query.resolve(context)
         except template.VariableDoesNotExist:
             pass
 
         if twitter_settings.TWITTER_ENABLE_CACHE:
-            cache_key = twitter_settings.TWITTER_CACHE_STATUS_KEY + 'search' + re.sub('\W+', ' ', self.query).strip()
-            statuses = twitter_search(self.query, self.limit)
-            # if cache.get(cache_key):
-            #     statuses = cache.get(cache_key)
-            # else:
-            #     statuses = twitter_search(self.query, self.limit)
-            #     cache.set(cache_key, statuses, twitter_settings.TWITTER_CACHE_TIMEOUT)
+            cache_key = twitter_settings.TWITTER_CACHE_STATUS_KEY + 'search' + re.sub('\W+', ' ', query).strip()
+            statuses = twitter_search(query, self.limit)
         else:
-            statuses = twitter_search(self.query, self.limit)
+            statuses = twitter_search(query, self.limit)
 
         context[twitter_settings.TWITTER_CONTEXT_STATUS_KEY] = json.loads(statuses)
 
